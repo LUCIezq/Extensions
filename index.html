@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser extensions manager UI</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <img src="./assets/images/logo.svg" alt="Logo" class="header__logo">
+      <input type="text" class="header__input" id="headerInput" placeholder="Ej: DevLens">
+      <img src="./assets/images/icon-moon.svg" class="header__dark-mode" alt="">
+    </header>
+
+    <main class="main">
+      <section class="main__content">
+
+        <h2 class="main__extension-title">Extensions list</h2>
+
+        <ul class="main__filter-options">
+          <li class="main__option main__option--active" data-filter="filter-all">All</li>
+          <li class="main__option" data-filter="filter-active">Active</li>
+          <li class="main__option" data-filter="filter-inactive"> Inactive</li>
+        </ul>
+
+      </section>
+
+      <div class="main__extension-container" id="containerElements">
+      </div>
+
+      <p class="main__extension-status">
+        There are no extensions to display.
+      </p>
+
+    </main>
+
+  </div>
+
+  <script defer src="./Script.js"></script>
+</body>
+
+</html>
