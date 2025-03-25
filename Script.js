@@ -2,7 +2,9 @@ const containerElements = document.getElementById('containerElements')
 let contador = 0;
 const inputHeader = document.getElementById('headerInput');
 const statusP = document.querySelector('.main__extension-status');
+const buttons = Array.from(document.querySelectorAll('.main__filter-options li'));
 let extensionesJson = [];
+const darkModeButton = document.getElementById('headerLabelInput');
 
 
 async function obtenerDatos() {
@@ -10,7 +12,7 @@ async function obtenerDatos() {
     extensionesJson = datos;
     generarContenido(datos);
     removeExtensiones();
-    activateExtension();
+    searchExtension();
 }
 
 async function obtenerDatosJson(url) {
@@ -37,10 +39,10 @@ function generarContenido(datos) {
                                 </div>
 
                                 <div class='content__bottom'>
-                                    <button class = 'button__remove'>Remove</button>
+                                    <button class = 'button__remove' data-id="${element.id}">Remove</button>
                                     <div class="checkbox-apple">
-                                        <input class="yep" id="${contador}" type="checkbox">
-                                        <label for="${contador}"></label>
+                                        <input class="yep" id="${element.id}" type="checkbox">
+                                        <label for="${element.id}"></label>
                                     </div>
                                 </div>                                
                             </div>`;
@@ -49,14 +51,20 @@ function generarContenido(datos) {
         containerElements.appendChild(newItem);
         contador++;
     })
+    removeExtensiones();
+    activateExtension();
 }
 
 function removeExtensiones() {
     const extensionesNode = document.querySelectorAll('.extension');
+
     extensionesNode.forEach(extension => {
-        const buttonRemove = extension.querySelector('button');
+        const buttonRemove = extension.getElementsByTagName('button')[0];
+        const dataId = buttonRemove.getAttribute('data-id');
+
         buttonRemove.addEventListener('click', () => {
-            extension.remove();
+            extensionesJson = extensionesJson.filter(extension => extension.id != dataId);
+            generarContenido(extensionesJson);
             statusController();
         })
     })
@@ -71,16 +79,23 @@ function statusController() {
 }
 
 function filterExtensions() {
-    const buttons = document.querySelectorAll('.main__filter-options li');
     const nodeExtensions = document.querySelectorAll('.extension');
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
-            let buttonActive = obtenerButtonActive(buttons).classList.remove('main__option--active');
-            button.classList.add('main__option--active');
+
+            let buttonActive = buttons.find(button => button.classList.contains('main__option--active'));
+
+            if (buttonActive) {
+                buttonActive.classList.remove('main__option--active');
+                button.classList.add('main__option--active');
+            } else {
+                throw new Error('Boton no encontrado');
+            }
 
             const filterType = button.getAttribute('data-filter');
-            let filter;
+            let filter = [];
+
             switch (filterType) {
                 case 'filter-all': filter = extensionesJson;
                     break;
@@ -89,7 +104,9 @@ function filterExtensions() {
                 case 'filter-inactive': filter = extensionesJson.filter(element => element.isActive == false);
                     break;
             }
-            generarContenido(filter);
+            if (filter != undefined) {
+                generarContenido(filter);
+            }
         })
     })
 
@@ -97,7 +114,7 @@ function filterExtensions() {
 
 const searchExtension = () => {
     inputHeader.addEventListener('keyup', () => {
-        const inputValue = inputHeader.value.toLowerCase();
+        const inputValue = inputHeader.value.toLowerCase().trim();
 
         const filteredExtensions = extensionesJson.filter(extension => extension.name.toLowerCase().includes(inputValue));
 
@@ -106,26 +123,47 @@ const searchExtension = () => {
     })
 }
 
-function obtenerButtonActive(buttons) {
-    return Array.from(buttons).find(button => button.classList.contains('main__option--active'));
-}
-
 const activateExtension = () => {
     const extensiones = document.querySelectorAll('.extension');
 
     extensiones.forEach(extension => {
         const extensionButton = extension.querySelector('input');
+
         extensionButton.addEventListener('click', () => {
             const id = extensionButton.getAttribute('id');
+            console.log(id)
             const extensionBuscada = extensionesJson.find(element => element.id == id);
+
+            console.log(extensionBuscada);
 
             if (extensionBuscada) {
                 extensionBuscada.isActive = !extensionBuscada.isActive;
+            } else {
+                throw new Error('Extension inexistente');
             }
         })
     })
 }
 
-searchExtension();
-filterExtensions();
+const activateDarkMode = () => {
+    darkModeButton.addEventListener('click', () => {
+        if (!document.getElementById("dark-mode-style")) { //Pregunta si existe o no -> Si no existe devuelve null y entra 
+            const linkCss = document.createElement('link');
+            linkCss.rel = 'stylesheet';
+            linkCss.href = './DarkMode.css';
+            linkCss.id = 'dark-mode-style';
+            document.head.appendChild(linkCss);
+        } else {
+            document.getElementById("dark-mode-style").remove();
+            //Si existe lo que hace es obtenerlo y eliminarlo.
+        }
+
+    })
+}
+
+activateDarkMode();
+
+
+activateExtension();
 obtenerDatos();
+filterExtensions();

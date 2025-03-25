@@ -1,25 +1,4 @@
-:root {
-    --Neutral-900: #09153e;
-    --Neutral-800: hsl(226, 25%, 17%);
-    --Neutral-700: hsl(225, 23%, 24%);
-    --Neutral-600: hsl(226, 11%, 37%);
-    --Neutral-300: hsl(0, 0%, 78%);
-    --Neutral-200: hsl(217, 61%, 90%);
-    --Neutral-100: hsl(0, 0%, 93%);
-    --Neutral-0: hsl(200, 60%, 99%);
-
-    --Red-400: hsl(3, 86%, 64%);
-    --Red-500: hsl(3, 71%, 56%);
-    --Red-700: hsl(3, 77%, 44%);
-
-    --Light-Gradient: linear-gradient(180deg, #EBF2FC 0%, #EEF8F9 100%);
-    --Dark-Gradient: linear-gradient(180deg, #040918 0%, #091540 100%);
-}
-
-@font-face {
-    font-family: 'Noto Sans';
-    src: url(./assets/fonts/NotoSans-VariableFont_wdth\,wght.ttf);
-}
+@import url(./Setting.css);
 
 * {
     font-family: 'Noto Sans';
@@ -39,14 +18,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: .4rem .7rem;
+    padding: .65rem .7rem;
     border-radius: 15px;
     background-color: var(--Neutral-0);
     box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.125);
 }
 
 .header__logo {
-    max-width: 120px;
+    font-size: 1rem;
+    color: black;
+    font-weight: 700;
 }
 
 .container {
@@ -101,7 +82,6 @@ body {
 
 .main__option:hover {
     outline: 1px solid black;
-    transition: .7s ease-out;
 }
 
 .main__option--active {
@@ -140,14 +120,11 @@ body {
 
 .content__description {
     color: rgba(0, 0, 0, 0.529);
+    font-size: .8rem;
 }
 
 .content__name {
     font-size: 1.2rem
-}
-
-.content__description {
-    font-size: .9rem;
 }
 
 .content__bottom {
@@ -161,7 +138,6 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.147);
     padding: .5rem 1rem;
     border-radius: 20px;
-    font-weight: 600;
     color: var(--Neutral-800);
     transition: .2s ease;
     cursor: pointer;
@@ -249,11 +225,38 @@ body {
 }
 
 .header__input {
-    padding: .5rem;
+    padding: .7rem;
     width: min(400px, 100%);
     border-radius: 12px;
     border: none;
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.215);
     outline: none;
     font-size: .85rem;
+}
+
+.label__container {
+    width: 40px;
+    height: 40px;
+    background-color: var(--Neutral-200);
+    border-radius: 10px;
+    display: grid;
+    place-content: center;
+}
+
+.header__label {
+    background-image: var(--Dark-mode-icon);
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    transition: .3s ease;
+}
+
+.header:has(.header__label-input:checked) {
+    --Dark-mode-icon: url(./assets/images/icon-sun.svg);
+}
+
+.header__label-input {
+    display: none;
 }

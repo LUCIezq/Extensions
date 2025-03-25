@@ -1,0 +1,76 @@
+body {
+    background: var(--Dark-Gradient);
+}
+
+.header {
+    background-color: var(--Neutral-800);
+}
+
+input {
+    background-color: var(--Neutral-700);
+    color: white;
+}
+
+input::placeholder {
+    color: var(--Neutral-300);
+}
+
+.main__extension-title {
+    color: white;
+}
+
+.main__option {
+    background-color: var(--Neutral-700);
+    color: white;
+}
+
+
+.main__option--active {
+    background-color: var(--Red-400);
+    color: var(--Neutral-800);
+}
+
+.main__option:hover {
+    background-color: var(--Red-400);
+    color: var(--Neutral-800);
+    outline: none;
+}
+
+.extension {
+    background-color: var(--Neutral-800);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.105);
+    border-radius: 15px;
+    max-width: 400px;
+}
+
+
+.content__name {
+    color: white;
+}
+
+.content__description {
+    color: var(--Neutral-300);
+}
+
+.button__remove {
+    background-color: transparent;
+    color: white;
+    border-color: rgba(255, 255, 255, 0.237);
+}
+
+.button__remove:hover {
+    background-color: var(--Red-500);
+    color: var(--Neutral-800);
+    border-color: var(--Neutral-800);
+}
+
+.extension {
+    box-shadow: 0px 0px 2px rgba(255, 255, 255, 0.666);
+}
+
+.header__logo{
+    color: white;
+}
+.label__container{
+    background-color: var(--Neutral-700);
+}
