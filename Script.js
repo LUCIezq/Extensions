@@ -3,8 +3,10 @@ let contador = 0;
 const inputHeader = document.getElementById('headerInput');
 const statusP = document.querySelector('.main__extension-status');
 const buttons = Array.from(document.querySelectorAll('.main__filter-options li'));
-let extensionesJson = [];
+let extensionesJson;
+let extensionesJsonActives = [];
 const darkModeButton = document.getElementById('headerLabelInput');
+let buttonActual = 'filter-all';
 
 
 async function obtenerDatos() {
@@ -51,6 +53,7 @@ function generarContenido(datos) {
         containerElements.appendChild(newItem);
         contador++;
     })
+    statusController();
     removeExtensiones();
     activateExtension();
 }
@@ -94,6 +97,8 @@ function filterExtensions() {
             }
 
             const filterType = button.getAttribute('data-filter');
+            buttonActual = filterType;
+            console.log(buttonActual)
             let filter = [];
 
             switch (filterType) {
@@ -116,10 +121,15 @@ const searchExtension = () => {
     inputHeader.addEventListener('keyup', () => {
         const inputValue = inputHeader.value.toLowerCase().trim();
 
-        const filteredExtensions = extensionesJson.filter(extension => extension.name.toLowerCase().includes(inputValue));
-
-        generarContenido(filteredExtensions);
-        statusController();
+        if (buttonActual == 'filter-all') {
+            generarContenido(extensionesJson.filter(extension => extension.name.toLowerCase().includes(inputValue)));
+        } else {
+            if (buttonActual == 'filter-active') {
+                generarContenido(extensionesJsonActives.filter(extension => extension.name.toLowerCase().includes(inputValue)));
+            } else {
+                generarContenido(extensionesJson.filter(extension => extension.name.toLowerCase().includes(inputValue)));
+            }
+        }
     })
 }
 
@@ -130,16 +140,21 @@ const activateExtension = () => {
         const extensionButton = extension.querySelector('input');
 
         extensionButton.addEventListener('click', () => {
-            const id = extensionButton.getAttribute('id');
-            console.log(id)
-            const extensionBuscada = extensionesJson.find(element => element.id == id);
+            const extensionBuscada = extensionesJson.find(element => element.id == extensionButton.getAttribute('id'));
 
-            console.log(extensionBuscada);
-
-            if (extensionBuscada) {
-                extensionBuscada.isActive = !extensionBuscada.isActive;
+            if (extensionBuscada && !extensionBuscada.isActive) {
+                extensionBuscada.isActive = true;
+                extensionesJsonActives.push(extensionBuscada);
             } else {
-                throw new Error('Extension inexistente');
+                extensionBuscada.isActive = false;
+                extensionesJsonActives = extensionesJsonActives.filter(extension => extension.id != extensionBuscada.id);
+            }
+            if (buttonActual == 'filter-active') {
+                generarContenido(extensionesJsonActives);
+            } else {
+                if (buttonActual == 'filter-inactive') {
+                    generarContenido(extensionesJson.filter(extension => !extension.isActive));
+                }
             }
         })
     })
@@ -157,13 +172,10 @@ const activateDarkMode = () => {
             document.getElementById("dark-mode-style").remove();
             //Si existe lo que hace es obtenerlo y eliminarlo.
         }
-
     })
 }
 
 activateDarkMode();
-
-
 activateExtension();
 obtenerDatos();
 filterExtensions();
